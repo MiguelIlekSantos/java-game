@@ -12,7 +12,8 @@ import java.util.Random;
 import javax.swing.ImageIcon;
 
 public class Enemy {
-	private int x, y, speed = 1, variant = 0;
+	private int variant = 0;
+	public double x, y, speed = 0.0;
 	public boolean[] movement = new boolean[] { false, false, false, false };
 	private double count = 0.0;
 	double scale = 2;
@@ -25,6 +26,14 @@ public class Enemy {
 	private double lifeLimit = 100;
 	public int damage = 5;
 	
+	public double getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(double speed) {
+		this.speed = speed;
+	}
+
 	public int getDamage() {
 		return damage;
 	}
@@ -33,7 +42,8 @@ public class Enemy {
 		this.damage = damage;
 	}
 	
-	public Enemy(int x, int y, int variant) {
+	public Enemy(int x, int y, int variant, double speed) {
+		this.speed = speed;
 		this.variant = variant;
 		this.x = x;
 		this.y = y;
@@ -71,7 +81,7 @@ public class Enemy {
 	}
 	
 	public Rectangle EnemyRect() {
-		Rectangle rect = new Rectangle(this.x, this.y, this.width, this.height);
+		Rectangle rect = new Rectangle((int) this.x + 5,(int) this.y + 5, this.width - 0, this.height - 20);
 		return rect;
 	}
 	 

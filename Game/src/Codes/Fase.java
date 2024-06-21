@@ -36,6 +36,7 @@ public class Fase extends JPanel implements ActionListener, MouseListener, Mouse
 	private static boolean[] EnemyMove = new boolean[] { false, false, false, false };
 	public int direction, enemyQuantit = 0, enemyCount = 0, preCount = 0, deadEnemys = 0;
 	public boolean generate = true;
+	public int enemysDamage = 5;
 	private Timer timer;
 	public List<Enemy> enemys = new ArrayList<>();
 
@@ -44,17 +45,25 @@ public class Fase extends JPanel implements ActionListener, MouseListener, Mouse
 	public Tilemap tilemap = new Tilemap();
 	public int[] scroll = { 0, 0 };
 	public int invencibilityTime = 15;
+	public int manaQuant = 30;
 
 	public List<Speel> speels = new ArrayList<>();
 	int actualSpeels = 0;
 	int money = 0;
 	int speelType = 0;
+	int speelSpeed = 2;
+	int speelScale = 1;
 	
 	public List<Coins> coins = new ArrayList<>();
 
 	JProgressBar lifeBar = new JProgressBar();
 	JProgressBar manaBar = new JProgressBar();
 	JLabel label = new JLabel(); 
+	JLabel price1 = new JLabel(); 
+	JLabel price2 = new JLabel(); 
+	JLabel price3 = new JLabel(); 
+	JLabel price4 = new JLabel(); 
+	JLabel labelDead = new JLabel(); 
 	ImageIcon image = new ImageIcon("src\\res\\Coins\\1.png");
 	Image newImage = image.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
 	ImageIcon finalimage = new ImageIcon(newImage);
@@ -76,6 +85,9 @@ public class Fase extends JPanel implements ActionListener, MouseListener, Mouse
 	public Fase() {		
 		
 		button1.setBounds(700, 70, 150, 50);
+		button1.setText("20 £");
+		button1.setForeground(new Color(105, 93, 17));
+		button1.setFont(new Font("MV Boli",Font.PLAIN,20));
 		button1.addActionListener(this);	
 		button1.setFocusable(false);
 		button1.setIcon(blue);
@@ -83,6 +95,9 @@ public class Fase extends JPanel implements ActionListener, MouseListener, Mouse
 		button1.setBorder(BorderFactory.createEtchedBorder());
 		
 		button2.setBounds(700, 130, 150, 50);
+		button2.setText("40 £");
+		button2.setForeground(new Color(105, 93, 17));
+		button2.setFont(new Font("MV Boli",Font.PLAIN,20));
 		button2.addActionListener(this);	
 		button2.setFocusable(false);
 		button2.setIcon(orange);
@@ -90,6 +105,9 @@ public class Fase extends JPanel implements ActionListener, MouseListener, Mouse
 		button2.setBorder(BorderFactory.createEtchedBorder());
 		
 		button3.setBounds(700, 190, 150, 50);
+		button3.setText("60 £");
+		button3.setForeground(new Color(105, 93, 17));
+		button3.setFont(new Font("MV Boli",Font.PLAIN,20));
 		button3.addActionListener(this);	
 		button3.setFocusable(false);
 		button3.setIcon(green);
@@ -97,6 +115,9 @@ public class Fase extends JPanel implements ActionListener, MouseListener, Mouse
 		button3.setBorder(BorderFactory.createEtchedBorder());
 		
 		button4.setBounds(700, 250, 150, 50);
+		button4.setText("80 £");
+		button4.setForeground(new Color(105, 93, 17));
+		button4.setFont(new Font("MV Boli",Font.PLAIN,20));
 		button4.addActionListener(this);	
 		button4.setFocusable(false);
 		button4.setIcon(dark);
@@ -116,6 +137,17 @@ public class Fase extends JPanel implements ActionListener, MouseListener, Mouse
 		label.setVerticalAlignment(JLabel.CENTER); 
 		label.setHorizontalAlignment(JLabel.CENTER); 
 		label.setBounds(650, 10, 200, 50); //x, y, width, height
+		
+		labelDead.setText("Você morreu :(");
+		labelDead.setHorizontalTextPosition(JLabel.CENTER); 
+		labelDead.setVerticalTextPosition(JLabel.CENTER); 
+		labelDead.setForeground(new Color(0, 0, 0)); 
+		labelDead.setFont(new Font("MV Boli",Font.PLAIN,20)); 
+		labelDead.setBackground(new Color(255, 0 ,0)); 
+		labelDead.setOpaque(true); 
+		labelDead.setVerticalAlignment(JLabel.CENTER); 
+		labelDead.setHorizontalAlignment(JLabel.CENTER); 
+		labelDead.setBounds(WindowWidth/2 - 100, 50, 200, 150); 
 		
 		lifeBar.setMaximum((int) player1.getLifeLimit());
 		lifeBar.setValue((int) player1.getLife());
@@ -160,27 +192,54 @@ public class Fase extends JPanel implements ActionListener, MouseListener, Mouse
 	}
 
 	public void mousePressed(MouseEvent e) {
-		actualSpeels += 1;
-		int direction = 0;
-		int value = e.getX() - WindowWidth/2;
-		if (value > 0) {
-			direction = 1;
-		} else {
-			direction = 2;
-		}
-		double mana = player1.getMana();
-		if (mana > 30) {
-			Speel speel1;
-			speels.add(speel1 = new Speel(player1.getX(), player1.getY(), direction, 3, speelType, 1));
-			player1.setMana(mana - 30);
-		}
-
+		
 	}
 
 	private class TecladoAdapter extends KeyAdapter {
 		@Override
 		public void keyPressed(KeyEvent tecla) {
 			int codigo = tecla.getKeyCode();
+			
+			if (codigo == KeyEvent.VK_RIGHT) {
+				actualSpeels += 1;
+				int direction = 1;
+				double mana = player1.getMana();
+				if (mana > 30) {
+					Speel speel1;
+					speels.add(speel1 = new Speel(player1.getX(), player1.getY(), direction, speelSpeed, speelType, speelScale));
+					player1.setMana(mana - manaQuant);
+				}
+			} else if (codigo == KeyEvent.VK_LEFT) {
+				actualSpeels += 1;
+				int direction = 2;
+				double mana = player1.getMana();
+				if (mana > 30) {
+					Speel speel1;
+					speels.add(speel1 = new Speel(player1.getX(), player1.getY(), direction, speelSpeed, speelType, speelScale));
+					player1.setMana(mana - manaQuant);
+				}
+			} else if (codigo == KeyEvent.VK_DOWN) {
+				actualSpeels += 1;
+				int direction = 3;
+				double mana = player1.getMana();
+				if (mana > 30) {
+					Speel speel1;
+					speels.add(speel1 = new Speel(player1.getX(), player1.getY(), direction, speelSpeed, speelType, speelScale));
+					player1.setMana(mana - manaQuant);
+				}
+			} else if (codigo == KeyEvent.VK_UP) {
+				actualSpeels += 1;
+				int direction = 4;
+				double mana = player1.getMana();
+				if (mana > 30) {
+					Speel speel1;
+					speels.add(speel1 = new Speel(player1.getX(), player1.getY(), direction, speelSpeed, speelType, speelScale));
+					player1.setMana(mana - manaQuant);
+				}
+			}
+			
+			
+			
 			if (codigo == KeyEvent.VK_A) {
 				direction = 2;
 				movement[2] = true;
@@ -246,7 +305,9 @@ public class Fase extends JPanel implements ActionListener, MouseListener, Mouse
 		        if (speelRect.intersects(enemyRect)) {
 		        	Coins coin1;
 		        	coins.add(coin1 = new Coins(enemyRect.x, enemyRect.y));
-		            spellIterator.remove();
+		            if (speelType != 1) {
+		            	spellIterator.remove();
+					}
 		            enemyIterator.remove();
 		            deadEnemys++;
 		            if (deadEnemys == enemyQuantit) {
@@ -274,10 +335,13 @@ public class Fase extends JPanel implements ActionListener, MouseListener, Mouse
 		
 	}
 
-	public void generateEnemys() {
+	public void generateEnemys() {	
 		if (generate) {
+			enemysDamage = enemysDamage + 1;
 			for (int i = 0; i < enemyQuantit; i++) {
-				Enemy enemy = new Enemy(random.nextInt(0, 1420), random.nextInt(0, 1420), random.nextInt(2));
+				double velo = random.nextDouble() * 2;
+				Enemy enemy = new Enemy(random.nextInt(0, 1420), random.nextInt(0, 1420), random.nextInt(2), velo);
+				enemy.setDamage(enemysDamage);
 				enemys.add(enemy);
 			}
 			generate = false;
@@ -290,10 +354,10 @@ public class Fase extends JPanel implements ActionListener, MouseListener, Mouse
 		while (enemyIterator.hasNext()) {
 			Enemy enemy = enemyIterator.next();
 
-			if (enemy.die) {
-				enemyIterator.remove();
-				continue;
-			}
+//			if (enemy.die) {
+//				enemyIterator.remove();
+//				continue;
+//			}
 
 			if (player_rect.x > enemy.EnemyRect().x) {
 				EnemyMove[0] = true;
@@ -349,10 +413,8 @@ public class Fase extends JPanel implements ActionListener, MouseListener, Mouse
 		
 		Rectangle player_rect = player1.PlayerRect();
 
-		this.scroll[0] += (int) (((player_rect.x + (player_rect.width / 2)) - (this.WindowWidth / 2) - this.scroll[0])
-				/ 10);
-		this.scroll[1] += (int) (((player_rect.y + (player_rect.height / 2)) - (this.WindowHeight / 2) - this.scroll[1])
-				/ 10);
+		this.scroll[0] += (int) (((player_rect.x + (player_rect.width / 2)) - (this.WindowWidth / 2) - this.scroll[0]) / 10);
+		this.scroll[1] += (int) (((player_rect.y + (player_rect.height / 2)) - (this.WindowHeight / 2) - this.scroll[1]) / 10);
 
 		Graphics2D graficos = (Graphics2D) g;
 		graficos.drawImage(fundo, -1, 0, null);
@@ -362,8 +424,10 @@ public class Fase extends JPanel implements ActionListener, MouseListener, Mouse
 		
 		if (player1.dead) {
 			player1.render(graficos, 4, movement, this.scroll);
-			
-	        Timer closeTimer = new Timer(1000, new ActionListener() {
+			add(labelDead);
+	        labelDead.setVisible(true); 
+	        labelDead.repaint(); 
+	        Timer closeTimer = new Timer(3000, new ActionListener() {
 	            @Override
 	            public void actionPerformed(ActionEvent e) {
 	                System.exit(0);
@@ -398,16 +462,37 @@ public class Fase extends JPanel implements ActionListener, MouseListener, Mouse
 	@Override
 	public void actionPerformed(ActionEvent e) {		
 		if(e.getSource()==button1) {
-			speelType = 0;
+			if (money >= 20) {
+				speelType = 0;
+				speelSpeed = 3;
+				money = money - 20;
+				manaQuant = 30;
+			}
 		}	
 		if(e.getSource()==button2) {
-			speelType = 3;
+			if (money >= 40) {
+				speelType = 3;
+				speelSpeed = 4;
+				money = money - 40;
+				manaQuant = 30;
+			}
 		}	
 		if(e.getSource()==button3) {
-			speelType = 2;
+			if (money >= 60) {
+				speelType = 2;
+				speelSpeed = 5;
+				money = money - 60;
+				manaQuant = 25;
+			}
 		}	
 		if(e.getSource()==button4) {
-			speelType = 1;
+			if (money >= 80) {
+				speelType = 1;
+				speelSpeed = 6;
+				speelScale = 2;
+				money = money - 80;
+				manaQuant = 15;
+			}
 		}	
 		repaint();
 	}

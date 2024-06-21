@@ -77,6 +77,12 @@ public class Speel {
 		if (this.direction == 2) {
 			this.x -= this.speed;
 		}
+		if (this.direction == 3) {
+			this.y += this.speed;
+		}
+		if (this.direction == 4) {
+			this.y -= this.speed;
+		}
 	}
 	
 	public void render(Graphics g, int[] scroll) {
@@ -89,6 +95,12 @@ public class Speel {
 	    
 	    if (this.direction == 2) {
 	    	at.rotate(Math.PI, img.getWidth(null) / 2, img.getHeight(null) / 2);
+		}
+	    if (this.direction == 3) {
+	    	at.rotate(Math.PI/2, img.getWidth(null) / 2, img.getHeight(null) / 2);
+		}
+	    if (this.direction == 4) {
+	    	at.rotate(Math.PI*3/2, img.getWidth(null) / 2, img.getHeight(null) / 2);
 		}
 	    
 	    graficos.drawImage(img, at, null);

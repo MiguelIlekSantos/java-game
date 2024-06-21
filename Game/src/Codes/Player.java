@@ -12,7 +12,7 @@ import java.util.Iterator;
 import javax.swing.ImageIcon;
 
 public class Player {
-	private int x, y, speed = 2, action = 0;
+	private int x, y, speed = 3, action = 0;
 	private double count = 0.0;
 	double scale = 2;
 	double BowScale = 0.5;
@@ -123,11 +123,19 @@ public class Player {
 	}
 	
 	public void update(boolean[] movement) {
-		if (mana < 200) {
-			if (mana+0.2 > 200) {
-				mana = 200;
+		if (mana < manaLimit) {
+			if (mana+0.2 > manaLimit) {
+				mana = manaLimit;
 			}else {
 				mana += 0.2;				
+			}
+		}
+		
+		if (life < lifeLimit) {
+			if (life+0.05 > lifeLimit) {
+				life = lifeLimit;
+			}else {
+				life += 0.05;				
 			}
 		}
 		
@@ -168,6 +176,7 @@ public class Player {
 		if (!dead) {
 			img = this.animation(direction, movement);
 		}else {
+			life = 0;
 			img = this.deadAnimation();
 		}
 		AffineTransform at = AffineTransform.getTranslateInstance(this.x - scroll[0], this.y - scroll[1]);
